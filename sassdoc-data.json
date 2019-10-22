@@ -1,0 +1,1582 @@
+[
+  {
+    "description": "指定したブレークポイントの最小値を取得する\n\n",
+    "commentRange": {
+      "start": 5,
+      "end": 18
+    },
+    "context": {
+      "type": "function",
+      "name": "breakpoint-min",
+      "code": "\n  $min: map-get($_breakpoints, $key);\n\n  @return if(strip-unit($min) != 0, $min, null);\n",
+      "line": {
+        "start": 20,
+        "end": 24
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "key",
+        "description": "$_breakpointsのキー\n"
+      }
+    ],
+    "return": {
+      "type": "number | null",
+      "description": "値が`0`の場合は`null`を返す\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$_breakpoints: (\"sm\": 0, \"md\": 768px, \"lg\": 1024px);\n@debug breakpoint-min(\"md\"); // 768px\n@debug breakpoint-min(\"sm\"); // null"
+      }
+    ],
+    "group": [
+      "02. メディアクエリー"
+    ],
+    "access": "public",
+    "require": [
+      {
+        "type": "function",
+        "name": "strip-unit"
+      }
+    ],
+    "file": {
+      "path": "breakpoint.scss",
+      "name": "breakpoint.scss"
+    },
+    "usedBy": [
+      {
+        "description": "ブラウザ幅またはviewportの幅が、指定したブレークポイントの最小値以上の場合にのみ、スタイルを適用する<br>\n指定したブレークポイントの最小値が0の場合は、すべてにスタイルを適用する\n\n",
+        "context": {
+          "type": "mixin",
+          "name": "mq-min",
+          "code": "\n  $min: breakpoint-min($key);\n\n  @if $min {\n    @media (min-width: $min) {\n      @content;\n    }\n  }\n\n  @else {\n    @content;\n  }\n",
+          "line": {
+            "start": 27,
+            "end": 39
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "指定したブレークポイントの最大値 (次のブレークポイントの最小値から-1したもの)を取得する\n\n",
+    "commentRange": {
+      "start": 26,
+      "end": 39
+    },
+    "context": {
+      "type": "function",
+      "name": "breakpoint-max",
+      "code": "\n  $next: map-get-next-key($_breakpoints, $key);\n\n  @return if($next != null, map-get($_breakpoints, $next) - 1, null);\n",
+      "line": {
+        "start": 41,
+        "end": 45
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "key",
+        "description": "$_breakpointsのキー\n"
+      }
+    ],
+    "return": {
+      "type": "number | null",
+      "description": "指定したブレークポイントの要素が、最後の要素である場合は、`null`を返す\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$_breakpoints: (\"sm\": 0, \"md\": 768px, \"lg\": 1024px);\n@debug breakpoint-min(\"md\"); // 1023px\n@debug breakpoint-min(\"lg\"); // null"
+      }
+    ],
+    "group": [
+      "02. メディアクエリー"
+    ],
+    "access": "public",
+    "require": [
+      {
+        "type": "function",
+        "name": "map-get-next-key"
+      }
+    ],
+    "file": {
+      "path": "breakpoint.scss",
+      "name": "breakpoint.scss"
+    },
+    "usedBy": [
+      {
+        "description": "ブラウザ幅またはviewportの幅が、指定したブレークポイントの最大値未満の場合にのみ、スタイルを適用する<br>\n指定したブレークポイントの最大値がない場合、すべてにスタイルを適用する\n\n",
+        "context": {
+          "type": "mixin",
+          "name": "mq-max",
+          "code": "\n  $max: breakpoint-max($key);\n\n  @if $max {\n    @media (max-width: $max) {\n      @content;\n    }\n  }\n\n  @else {\n    @content;\n  }\n",
+          "line": {
+            "start": 63,
+            "end": 75
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "ブラウザ幅またはviewportの幅が、指定したブレークポイントの最小値以上の場合にのみ、スタイルを適用する<br>\n指定したブレークポイントの最小値が0の場合は、すべてにスタイルを適用する\n\n",
+    "commentRange": {
+      "start": 5,
+      "end": 25
+    },
+    "context": {
+      "type": "mixin",
+      "name": "mq-min",
+      "code": "\n  $min: breakpoint-min($key);\n\n  @if $min {\n    @media (min-width: $min) {\n      @content;\n    }\n  }\n\n  @else {\n    @content;\n  }\n",
+      "line": {
+        "start": 27,
+        "end": 39
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "key",
+        "description": "ブレークポイント\n"
+      }
+    ],
+    "example": [
+      {
+        "type": "scss",
+        "code": ".element {\n  @include mq-min(\"sm\") {\n    width: 100%;\n  }\n}\n\n// CSS Output\n@media (min-width: 480px) {\n  .element {\n    width: 100%;\n  }\n}"
+      }
+    ],
+    "group": [
+      "02. メディアクエリー"
+    ],
+    "access": "public",
+    "content": "",
+    "require": [
+      {
+        "type": "function",
+        "name": "breakpoint-min"
+      }
+    ],
+    "file": {
+      "path": "media.scss",
+      "name": "media.scss"
+    }
+  },
+  {
+    "description": "ブラウザ幅またはviewportの幅が、指定したブレークポイントの最大値未満の場合にのみ、スタイルを適用する<br>\n指定したブレークポイントの最大値がない場合、すべてにスタイルを適用する\n\n",
+    "commentRange": {
+      "start": 41,
+      "end": 61
+    },
+    "context": {
+      "type": "mixin",
+      "name": "mq-max",
+      "code": "\n  $max: breakpoint-max($key);\n\n  @if $max {\n    @media (max-width: $max) {\n      @content;\n    }\n  }\n\n  @else {\n    @content;\n  }\n",
+      "line": {
+        "start": 63,
+        "end": 75
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "key",
+        "description": "ブレークポイント\n"
+      }
+    ],
+    "example": [
+      {
+        "type": "scss",
+        "code": ".element {\n  @include mq-max(\"sm\") {\n    width: 100%;\n  }\n}\n\n// CSS Output\n@media (max-width: 767px) {\n  .element {\n    width: 100%;\n  }\n}"
+      }
+    ],
+    "group": [
+      "02. メディアクエリー"
+    ],
+    "access": "public",
+    "content": "",
+    "require": [
+      {
+        "type": "function",
+        "name": "breakpoint-max"
+      }
+    ],
+    "file": {
+      "path": "media.scss",
+      "name": "media.scss"
+    }
+  },
+  {
+    "description": "デバイスの向きが指定した向きと一致する場合にのみ、スタイルを適用する\n\n",
+    "commentRange": {
+      "start": 77,
+      "end": 114
+    },
+    "context": {
+      "type": "mixin",
+      "name": "mq-ori",
+      "code": "\n  @if $orientation == 'ls' {\n    $orientation: landscape;\n  }\n\n  @else if $orientation == 'pr' {\n    $orientation: portrait;\n  }\n\n  @media (orientation: $orientation) {\n    @content;\n  }\n",
+      "line": {
+        "start": 116,
+        "end": 128
+      }
+    },
+    "since": [
+      {
+        "version": "2.3.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "orientation",
+        "description": "向き\n  <table class=\"item__parameters\">\n    <thead>\n      <tr>\n        <th>値</th>\n        <th>説明</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>`ls`</td>\n        <td>`Landscape`のときにスタイルを適用する</td>\n      </tr>\n      <tr>\n        <td>`pr`</td>\n        <td>`Portrait`のときにスタイルを適用する</td>\n      </tr>\n    </tbody>\n  </table>\n"
+      }
+    ],
+    "example": [
+      {
+        "type": "scss",
+        "code": ".element {\n  @include mq-ori(\"ls\") {\n    width: 100%;\n  }\n}\n\n// CSS Output\n@media (orientation: landscape) {\n  .element {\n    width: 100%;\n  }\n}"
+      }
+    ],
+    "group": [
+      "02. メディアクエリー"
+    ],
+    "access": "public",
+    "content": "",
+    "require": [],
+    "file": {
+      "path": "media.scss",
+      "name": "media.scss"
+    }
+  },
+  {
+    "description": "区切り文字で区切られた文字列をキャメルケースまたはパスカルケースに変換する\n\n",
+    "commentRange": {
+      "start": 5,
+      "end": 20
+    },
+    "context": {
+      "type": "function",
+      "name": "capitalize",
+      "code": "\n  $capitalized: '';\n  $capital: $pascalcase;\n\n  @for $i from 1 through str-length($words) {\n    $letter: str-slice($words, $i, $i);\n\n    @if (has($separators, $letter)) {\n      $capital: true;\n    }\n\n    @else {\n      $capitalized: $capitalized + if($capital, to-upper-case($letter), $letter);\n      $capital: false;\n    }\n  }\n\n  @return $capitalized;\n",
+      "line": {
+        "start": 22,
+        "end": 40
+      }
+    },
+    "since": [
+      {
+        "version": "2.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "words",
+        "description": "区切り文字で区切られた文字列"
+      },
+      {
+        "type": "boolean",
+        "name": "pascalcase",
+        "default": "false",
+        "description": "キャメルケースではなく、パスカルケースに変換する"
+      },
+      {
+        "type": "list",
+        "name": "separators",
+        "default": "(\" \", \"-\", \"_\")",
+        "description": "区切り文字\n"
+      }
+    ],
+    "return": {
+      "type": "string"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "@debug capitalize(\"hello world\"); // helloWorld\n@debug capitalize(\"hello world\", true); // HelloWorld"
+      }
+    ],
+    "group": [
+      "10. 文字列の変換"
+    ],
+    "access": "public",
+    "require": [
+      {
+        "type": "function",
+        "name": "has"
+      }
+    ],
+    "file": {
+      "path": "string.scss",
+      "name": "string.scss"
+    }
+  },
+  {
+    "description": "px単位の値をrem単位の値に変換する\n\n",
+    "commentRange": {
+      "start": 5,
+      "end": 16
+    },
+    "context": {
+      "type": "function",
+      "name": "rem",
+      "code": "\n  @return absolute-to-relative($px, $_font-size) * 1rem;\n",
+      "line": {
+        "start": 18,
+        "end": 20
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "number",
+        "name": "px",
+        "description": "変換対象値 (単位は省略可)\n"
+      }
+    ],
+    "return": {
+      "type": "number"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$_font-size: 16px;\n@debug rem(12px); // .75rem;"
+      }
+    ],
+    "group": [
+      "11. 単位の変換"
+    ],
+    "access": "public",
+    "require": [
+      {
+        "type": "function",
+        "name": "absolute-to-relative"
+      }
+    ],
+    "file": {
+      "path": "unit.scss",
+      "name": "unit.scss"
+    }
+  },
+  {
+    "description": "px単位の値を%単位の値に変換する\n\n",
+    "commentRange": {
+      "start": 22,
+      "end": 34
+    },
+    "context": {
+      "type": "function",
+      "name": "per",
+      "code": "\n  @return percentage(absolute-to-relative($px, $basis));\n",
+      "line": {
+        "start": 36,
+        "end": 38
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "number",
+        "name": "px",
+        "description": "変換対象値 (単位は省略可)"
+      },
+      {
+        "type": "number",
+        "name": "basis",
+        "description": "変換基準値 (単位は省略可)\n"
+      }
+    ],
+    "return": {
+      "type": "number"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "@debug per(100px, 1000px); // 10%"
+      }
+    ],
+    "group": [
+      "11. 単位の変換"
+    ],
+    "access": "public",
+    "require": [
+      {
+        "type": "function",
+        "name": "absolute-to-relative"
+      }
+    ],
+    "file": {
+      "path": "unit.scss",
+      "name": "unit.scss"
+    }
+  },
+  {
+    "description": "px単位の値をvw単位の値に変換する\n\n",
+    "commentRange": {
+      "start": 40,
+      "end": 50
+    },
+    "context": {
+      "type": "function",
+      "name": "vw",
+      "code": "\n  @return absolute-to-relative($px, $_viewport-width, true) * 1vw;\n",
+      "line": {
+        "start": 52,
+        "end": 54
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "number",
+        "name": "px",
+        "description": "変換対象値 (単位は省略可)\n"
+      }
+    ],
+    "return": {
+      "type": "number"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$_viewport-width: 640px;\n@debug vw(32px); // 5vw"
+      }
+    ],
+    "group": [
+      "11. 単位の変換"
+    ],
+    "access": "public",
+    "require": [
+      {
+        "type": "function",
+        "name": "absolute-to-relative"
+      }
+    ],
+    "file": {
+      "path": "unit.scss",
+      "name": "unit.scss"
+    }
+  },
+  {
+    "description": "px単位の値をvh単位の値に変換する\n\n",
+    "commentRange": {
+      "start": 56,
+      "end": 66
+    },
+    "context": {
+      "type": "function",
+      "name": "vh",
+      "code": "\n  @return absolute-to-relative($px, $_viewport-height, true) * 1vh;\n",
+      "line": {
+        "start": 68,
+        "end": 70
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "number",
+        "name": "px",
+        "description": "変換対象値 (単位は省略可)\n"
+      }
+    ],
+    "return": {
+      "type": "number"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$_viewport-height: 1136px;\n@debug vh(32px); // 2.8169vh"
+      }
+    ],
+    "group": [
+      "11. 単位の変換"
+    ],
+    "access": "public",
+    "require": [
+      {
+        "type": "function",
+        "name": "absolute-to-relative"
+      }
+    ],
+    "file": {
+      "path": "unit.scss",
+      "name": "unit.scss"
+    }
+  },
+  {
+    "description": "数値から単位を取り除く\n\n",
+    "commentRange": {
+      "start": 72,
+      "end": 83
+    },
+    "context": {
+      "type": "function",
+      "name": "strip-unit",
+      "code": "\n  @return $number / ($number * 0 + 1);\n",
+      "line": {
+        "start": 85,
+        "end": 87
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "number",
+        "name": "number",
+        "description": "単位付きの数値\n"
+      }
+    ],
+    "return": {
+      "type": "number",
+      "description": "単位を取り除いた数値\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "@debug strip-unit(12px); // 12"
+      }
+    ],
+    "group": [
+      "11. 単位の変換"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "unit.scss",
+      "name": "unit.scss"
+    },
+    "usedBy": [
+      {
+        "description": "指定したブレークポイントの最小値を取得する\n\n",
+        "context": {
+          "type": "function",
+          "name": "breakpoint-min",
+          "code": "\n  $min: map-get($_breakpoints, $key);\n\n  @return if(strip-unit($min) != 0, $min, null);\n",
+          "line": {
+            "start": 20,
+            "end": 24
+          }
+        }
+      },
+      {
+        "description": "絶対単位の値から相対単位の値に変換する\n\n",
+        "context": {
+          "type": "function",
+          "name": "absolute-to-relative",
+          "code": "\n  $abs: strip-unit($abs);\n  $basis: strip-unit($basis);\n  $relative: $abs / $basis;\n\n  @return if($percentage, $relative * 100, $relative);\n",
+          "line": {
+            "start": 57,
+            "end": 63
+          }
+        }
+      },
+      {
+        "description": "絶対単位の値から相対単位の値に変換する\n\n",
+        "context": {
+          "type": "function",
+          "name": "absolute-to-relative",
+          "code": "\n  $abs: strip-unit($abs);\n  $basis: strip-unit($basis);\n  $relative: $abs / $basis;\n\n  @return if($percentage, $relative * 100, $relative);\n",
+          "line": {
+            "start": 57,
+            "end": 63
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "リストの最初の値を取得する\n\n",
+    "commentRange": {
+      "start": 5,
+      "end": 17
+    },
+    "context": {
+      "type": "function",
+      "name": "first",
+      "code": "\n  @return nth($list, 1);\n",
+      "line": {
+        "start": 19,
+        "end": 21
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "list",
+        "name": "list",
+        "description": "取得対象のリスト\n"
+      }
+    ],
+    "return": {
+      "type": "*",
+      "description": "リストの最初の値\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$list: (\"A\" \"B\" \"C\");\n@debug first($list); // \"A\""
+      }
+    ],
+    "group": [
+      "50. リスト"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "list.scss",
+      "name": "list.scss"
+    }
+  },
+  {
+    "description": "リストの最後の値を取得する\n\n",
+    "commentRange": {
+      "start": 23,
+      "end": 35
+    },
+    "context": {
+      "type": "function",
+      "name": "last",
+      "code": "\n  @return nth($list, length($list));\n",
+      "line": {
+        "start": 37,
+        "end": 39
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "list",
+        "name": "list",
+        "description": "取得対象のリスト\n"
+      }
+    ],
+    "return": {
+      "type": "*",
+      "description": "リストの最後の値\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$list: (\"A\" \"B\" \"C\");\n@debug last($list); // \"C\""
+      }
+    ],
+    "group": [
+      "50. リスト"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "list.scss",
+      "name": "list.scss"
+    }
+  },
+  {
+    "description": "リストの先頭に値を追加する\n\n",
+    "commentRange": {
+      "start": 41,
+      "end": 55
+    },
+    "context": {
+      "type": "function",
+      "name": "prepend",
+      "code": "\n  $result: ();\n  $result: append($result, $value);\n\n  @return join($result, $list);\n",
+      "line": {
+        "start": 57,
+        "end": 62
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "list",
+        "name": "list",
+        "description": "追加対象のリスト"
+      },
+      {
+        "type": "*",
+        "name": "value",
+        "description": "追加する値\n"
+      }
+    ],
+    "return": {
+      "type": "list",
+      "description": "追加後のリスト\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$list: (\"A\" \"B\" \"C\");\n@debug prepend($list, \"Z\"); // (\"Z\" \"A\" \"B\" \"C\")"
+      }
+    ],
+    "group": [
+      "50. リスト"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "list.scss",
+      "name": "list.scss"
+    }
+  },
+  {
+    "description": "リストの最初の値を削除する\n\n",
+    "commentRange": {
+      "start": 64,
+      "end": 76
+    },
+    "context": {
+      "type": "function",
+      "name": "shift",
+      "code": "\n  $result: ();\n\n  @for $i from 2 through length($list) {\n    $result: append($result, nth($list, $i));\n  }\n\n  @return $result;\n",
+      "line": {
+        "start": 78,
+        "end": 86
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "list",
+        "name": "list",
+        "description": "削除対象のリスト\n"
+      }
+    ],
+    "return": {
+      "type": "list",
+      "description": "削除後のリスト\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$list: (\"A\" \"B\" \"C\");\n@debug shift($list); // (\"B\" \"C\")"
+      }
+    ],
+    "group": [
+      "50. リスト"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "list.scss",
+      "name": "list.scss"
+    }
+  },
+  {
+    "description": "リストの最後の値を削除する\n\n",
+    "commentRange": {
+      "start": 88,
+      "end": 100
+    },
+    "context": {
+      "type": "function",
+      "name": "pop",
+      "code": "\n  $result: ();\n\n  @for $i from 1 through length($list) - 1 {\n    $result: append($result, nth($list, $i));\n  }\n\n  @return $result;\n",
+      "line": {
+        "start": 102,
+        "end": 110
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "list",
+        "name": "list",
+        "description": "削除対象のリスト\n"
+      }
+    ],
+    "return": {
+      "type": "list",
+      "description": "削除後のリスト\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$list: (\"A\" \"B\" \"C\");\n@debug pop($list); // (\"A\" \"B\")"
+      }
+    ],
+    "group": [
+      "50. リスト"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "list.scss",
+      "name": "list.scss"
+    }
+  },
+  {
+    "description": "文字列を分割し、リストで返す\n\n",
+    "commentRange": {
+      "start": 112,
+      "end": 124
+    },
+    "context": {
+      "type": "function",
+      "name": "explode",
+      "code": "\n  $list: ();\n  $sum: str-length($string);\n\n  @for $i from 1 through $sum {\n    $str: str-index($string, $separator);\n\n    @if str-length($string) >= 1 and $str == null {\n      $list: append($list, $string);\n      $string: '';\n    }\n\n    @if type-of($str) == 'number' {\n      $each: str-slice($string, 0, ($str - 1));\n      $list: append($list, $each);\n      $string: str-slice($string, ($str + 1), $sum);\n    }\n  }\n\n  @return $list;\n",
+      "line": {
+        "start": 126,
+        "end": 146
+      }
+    },
+    "since": [
+      {
+        "version": "1.2.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "string",
+        "description": "分割対象の文字列"
+      },
+      {
+        "type": "string",
+        "name": "separator",
+        "description": "区切り文字\n"
+      }
+    ],
+    "return": {
+      "type": "list"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "@debug explode(\"2000-01-01\", \"-\"); // (\"2000\" \"01\" \"01\")"
+      }
+    ],
+    "group": [
+      "50. リスト"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "list.scss",
+      "name": "list.scss"
+    }
+  },
+  {
+    "description": "リストに指定した値が含まれているか確認する\n\n",
+    "commentRange": {
+      "start": 148,
+      "end": 185
+    },
+    "context": {
+      "type": "function",
+      "name": "has",
+      "code": "\n  $operation: to-upper-case($operation);\n\n  @if ($operation == 'AND') {\n    @each $value in $values {\n      @if index($list, $value) == null {\n        @return false;\n      }\n    }\n\n    @return true;\n  }\n\n  @elseif ($operation == \"OR\") {\n    @each $value in $values {\n      @if index($list, $value) {\n        @return true;\n      }\n    }\n\n    @return false;\n  }\n",
+      "line": {
+        "start": 187,
+        "end": 209
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "list",
+        "name": "list",
+        "description": "検索対象のリスト"
+      },
+      {
+        "type": "string | number | color | list",
+        "name": "values",
+        "description": "検索条件"
+      },
+      {
+        "type": "string",
+        "name": "operation",
+        "default": "AND",
+        "description": "`$values`にリストを渡した場合の動作設定\n  <table class=\"item__parameters\">\n    <thead>\n      <tr>\n        <th>値</th>\n        <th>説明</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>`AND`</td>\n        <td>`$values`の全てが`$list`に含まれる場合に`true`を返す</td>\n      </tr>\n      <tr>\n        <td>`OR`</td>\n        <td>`$values`のいずれかが`$list`に含まれる場合に`true`を返す</td>\n      </tr>\n    </tbody>\n  </table>\n"
+      }
+    ],
+    "return": {
+      "type": "boolean"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$list: (\"A\" \"B\" \"C\");\n@debug has($list, \"A\"); // true\n@debug has($list, (\"A\" \"B\")); // true\n@debug has($list, (\"A\" \"Z\")); // false\n@debug has($list, (\"A\" \"Z\"), \"OR\"); // true\n@debug has($list, (\"Y\" \"Z\"), \"OR\"); // false"
+      }
+    ],
+    "group": [
+      "50. リスト"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "list.scss",
+      "name": "list.scss"
+    },
+    "usedBy": [
+      {
+        "description": "区切り文字で区切られた文字列をキャメルケースまたはパスカルケースに変換する\n\n",
+        "context": {
+          "type": "function",
+          "name": "capitalize",
+          "code": "\n  $capitalized: '';\n  $capital: $pascalcase;\n\n  @for $i from 1 through str-length($words) {\n    $letter: str-slice($words, $i, $i);\n\n    @if (has($separators, $letter)) {\n      $capital: true;\n    }\n\n    @else {\n      $capitalized: $capitalized + if($capital, to-upper-case($letter), $letter);\n      $capital: false;\n    }\n  }\n\n  @return $capitalized;\n",
+          "line": {
+            "start": 22,
+            "end": 40
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "マップの要素の値を変更する<br>\n更対象の要素が存在しない場合、新たに要素を追加する\n\n",
+    "commentRange": {
+      "start": 5,
+      "end": 28
+    },
+    "context": {
+      "type": "function",
+      "name": "map-set",
+      "code": "\n  @return map-merge(\n    $map,\n    (\n      $key: $value\n    )\n  );\n",
+      "line": {
+        "start": 30,
+        "end": 37
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "map",
+        "name": "map",
+        "description": "操作対象のマップ"
+      },
+      {
+        "type": "string",
+        "name": "key",
+        "description": "変更対象要素のキー"
+      },
+      {
+        "type": "*",
+        "name": "value",
+        "description": "変更対象要素に設定する値\n"
+      }
+    ],
+    "return": {
+      "type": "map",
+      "description": "要素の値を変更、または要素を追加したマップ\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$map: (\n  \"white\": #fff,\n  \"black\": #000\n);\n@debug map-set($map, \"black\", #333);\n// (\n//   \"white\": #fff,\n//   \"black\": #333\n// );"
+      }
+    ],
+    "group": [
+      "51. マップ"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "map.scss",
+      "name": "map.scss"
+    }
+  },
+  {
+    "description": "多次元構造のマップの、要素の値を変更する<br>\n変更対象の要素が存在しない場合、新たに要素を追加する\n\n",
+    "commentRange": {
+      "start": 39,
+      "end": 70
+    },
+    "context": {
+      "type": "function",
+      "name": "map-deep-set",
+      "code": "\n  $map-list: ();\n  $map-list: append($map-list, $map);\n  $result: null;\n\n  @if length($keys) == 2 {\n    @return map-merge(\n      $map,\n      (\n        nth($keys, 1): nth($keys, -1)\n      )\n    );\n  }\n\n  @for $i from 1 through length($keys) - 2 {\n    $map-list: append($map-list, map-get(nth($map-list, -1), nth($keys, $i)));\n  }\n\n  @for $i from length($map-list) through 1 {\n    $result: map-merge(\n      nth($map-list, $i),\n      (\n        nth($keys, $i): if($i == length($map-list), nth($keys, -1), $result)\n      )\n    );\n  }\n\n  @return $result;\n",
+      "line": {
+        "start": 72,
+        "end": 100
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "map",
+        "name": "map",
+        "description": "操作対象のマップ"
+      },
+      {
+        "type": "可変長引数",
+        "name": "keys...",
+        "description": "目的の要素までのキーを、1次元目から順に指定する<br>\n  可変長引数の最後の値は、変更対象要素に設定する値となる\n"
+      }
+    ],
+    "return": {
+      "type": "map",
+      "description": "要素の値を変更、または要素を追加したマップ\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$map: (\n  \"columns\": 12,\n  \"layouts\": (\n    \"small\": 800px,\n    \"medium\": 1000px,\n    \"large\": 1200px\n  )\n);\n@debug map-deep-set($map, \"layouts\", \"small\", 600px);\n// (\n//   \"columns\": 12,\n//   \"layouts\": (\n//     \"small\": 600px,\n//     \"medium\": 1000px,\n//     \"large\": 1200px\n//   )\n// );"
+      }
+    ],
+    "group": [
+      "51. マップ"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "map.scss",
+      "name": "map.scss"
+    }
+  },
+  {
+    "description": "多次元構造のマップから、要素の値を取得する\n\n",
+    "commentRange": {
+      "start": 102,
+      "end": 123
+    },
+    "context": {
+      "type": "function",
+      "name": "map-deep-get",
+      "code": "\n  @each $key in $keys {\n    $map: map-get($map, $key);\n  }\n\n  @return $map;\n",
+      "line": {
+        "start": 125,
+        "end": 131
+      }
+    },
+    "since": [
+      {
+        "version": "1.1.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "map",
+        "name": "map",
+        "description": "操作対象のマップ"
+      },
+      {
+        "type": "可変長引数",
+        "name": "keys...",
+        "description": "目的の要素までのキーを、1次元目から順に指定する\n"
+      }
+    ],
+    "return": {
+      "type": "*",
+      "description": "要素の値\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$map: (\n  \"columns\": 12,\n  \"layouts\": (\n    \"small\": 800px,\n    \"medium\": 1000px,\n    \"large\": 1200px\n  )\n);\n@debug map-deep-get($map, \"layouts\", \"small\"); // 800px"
+      }
+    ],
+    "group": [
+      "51. マップ"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "map.scss",
+      "name": "map.scss"
+    }
+  },
+  {
+    "description": "マップから、指定したキーの次の要素のキーを取得する<br>\n指定したキーが、マップの最後の要素である場合は、`null`を返す\n\n",
+    "commentRange": {
+      "start": 133,
+      "end": 149
+    },
+    "context": {
+      "type": "function",
+      "name": "map-get-next-key",
+      "code": "\n  $keys: map-keys($map);\n  $index: index($keys, $key);\n\n  @return if($index < length($keys), nth($keys, $index + 1), null);\n",
+      "line": {
+        "start": 151,
+        "end": 156
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "map",
+        "name": "map",
+        "description": "操作対象のマップ"
+      },
+      {
+        "type": "string",
+        "name": "key",
+        "description": "取得対象要素の前の要素のキー\n"
+      }
+    ],
+    "return": {
+      "type": "string | null",
+      "description": "取得対象要素のキー、または`null`\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$map: (\"A\": 1, \"B\": 2, \"C\": 3);\n@debug map-get-next-key(\"B\", $map); // C\n@debug map-get-next-key(\"C\", $map); // null"
+      }
+    ],
+    "group": [
+      "51. マップ"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "map.scss",
+      "name": "map.scss"
+    },
+    "usedBy": [
+      {
+        "description": "指定したブレークポイントの最大値 (次のブレークポイントの最小値から-1したもの)を取得する\n\n",
+        "context": {
+          "type": "function",
+          "name": "breakpoint-max",
+          "code": "\n  $next: map-get-next-key($_breakpoints, $key);\n\n  @return if($next != null, map-get($_breakpoints, $next) - 1, null);\n",
+          "line": {
+            "start": 41,
+            "end": 45
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "マップから、指定したキーの前の要素のキーを取得する<br>\n指定したキーが、マップの最初の要素である場合は、`null`を返す\n\n",
+    "commentRange": {
+      "start": 158,
+      "end": 174
+    },
+    "context": {
+      "type": "function",
+      "name": "map-get-prev-key",
+      "code": "\n  $keys: map-keys($map);\n  $index: index($keys, $key);\n\n  @return if($index > 1, nth($keys, $index - 1), null);\n",
+      "line": {
+        "start": 176,
+        "end": 181
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "map",
+        "name": "map",
+        "description": "操作対象のマップ"
+      },
+      {
+        "type": "string",
+        "name": "key",
+        "description": "取得対象要素の次の要素のキー\n"
+      }
+    ],
+    "return": {
+      "type": "string | null",
+      "description": "取得対象要素のキー、または`null`\n"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$map: (\"A\": 1, \"B\": 2, \"C\": 3);\n@debug map-get-prev-key(\"B\", $map); // \"A\"\n@debug map-get-prev-key(\"A\", $map); // null"
+      }
+    ],
+    "group": [
+      "51. マップ"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "map.scss",
+      "name": "map.scss"
+    }
+  },
+  {
+    "description": "指定した色名のカラーコードを取得する\n\n",
+    "commentRange": {
+      "start": 7,
+      "end": 18
+    },
+    "context": {
+      "type": "function",
+      "name": "c",
+      "code": "\n  @return map-get($_colors, $key);\n",
+      "line": {
+        "start": 20,
+        "end": 22
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "key",
+        "description": "$_colors変数のキー（色名）\n"
+      }
+    ],
+    "return": {
+      "type": "color"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$_colors: (\"black\": #000, \"white\": #fff);\n@debug c(\"black\"); // #000"
+      }
+    ],
+    "group": [
+      "99. ユーティリティ"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "utility.scss",
+      "name": "utility.scss"
+    }
+  },
+  {
+    "description": "指定した名前のz-index値を取得する\n\n",
+    "commentRange": {
+      "start": 24,
+      "end": 37
+    },
+    "context": {
+      "type": "function",
+      "name": "z",
+      "code": "\n  @return map-get($_z-indexes, $key) + $index;\n",
+      "line": {
+        "start": 39,
+        "end": 41
+      }
+    },
+    "since": [
+      {
+        "version": "2.8.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "string",
+        "name": "key",
+        "description": "$_z-indexes変数のキー"
+      },
+      {
+        "type": "number",
+        "name": "index",
+        "description": "加減算値\n"
+      }
+    ],
+    "return": {
+      "type": "color"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "$_z-indexes: (\"header\": 1000, \"overlay\": 10000);\n@debug z(\"header\", 1); // 1001"
+      }
+    ],
+    "group": [
+      "99. ユーティリティ"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "utility.scss",
+      "name": "utility.scss"
+    }
+  },
+  {
+    "description": "複数行の文章を指定行数まで省略する\n\n",
+    "commentRange": {
+      "start": 5,
+      "end": 50
+    },
+    "context": {
+      "type": "mixin",
+      "name": "truncate",
+      "code": "\n  position: relative;\n  padding-right: 1em;\n  overflow: hidden;\n  line-height: $lheight;\n  background-color: $bgcolor;\n\n  @if $fixed {\n    height: 1em * $lheight * $lines;\n  }\n\n  @else {\n    max-height: 1em * $lheight * $lines;\n  }\n\n  &::before {\n    position: absolute;\n    right: 0;\n    bottom: 0;\n    display: inline-block;\n    width: 1em;\n    font-weight: normal;\n    content: '…';\n  }\n\n  &::after {\n    position: absolute;\n    right: 0;\n    float: right;\n    width: 1em;\n    height: 1em * $lheight * $lines;\n    margin-left: -1em;\n    content: '';\n    background-color: inherit;\n  }\n",
+      "line": {
+        "start": 52,
+        "end": 87
+      }
+    },
+    "since": [
+      {
+        "version": "1.5.2"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "number",
+        "name": "lines",
+        "description": "最大行数"
+      },
+      {
+        "type": "color",
+        "name": "bgcolor",
+        "description": "背景色"
+      },
+      {
+        "type": "number",
+        "name": "lheight",
+        "default": "$_line-height",
+        "description": "line-heightの値"
+      },
+      {
+        "type": "boolean",
+        "name": "fixed",
+        "default": "false",
+        "description": "文章エリアの高さを最大行数分維持する\n"
+      }
+    ],
+    "example": [
+      {
+        "type": "scss",
+        "code": ".element {\n  @include truncate(2, #fff, 1.5);\n}\n\n// CSS Output\n.element {\n  line-height: 1.5;\n  background-color: #fff;\n  max-height: 3em;\n  padding-right: 1em;\n  overflow: hidden;\n  position: relative;\n  &::before {\n    content: \"…\";\n    font-weight: normal;\n    width: 1em;\n    display: inline-block;\n    position: absolute;\n    right: 0;\n    bottom: 0;\n  }\n  &::after {\n    content: \"\";\n    background-color: inherit;\n    width: 1em;\n    height: 3em;\n    margin-left: -1em;\n    float: right;\n    position: absolute;\n    right: 0;\n  }\n}"
+      }
+    ],
+    "group": [
+      "99. ユーティリティ"
+    ],
+    "access": "public",
+    "require": [],
+    "file": {
+      "path": "utility.scss",
+      "name": "utility.scss"
+    }
+  },
+  {
+    "description": "絶対単位の値から相対単位の値に変換する\n\n",
+    "commentRange": {
+      "start": 43,
+      "end": 55
+    },
+    "context": {
+      "type": "function",
+      "name": "absolute-to-relative",
+      "code": "\n  $abs: strip-unit($abs);\n  $basis: strip-unit($basis);\n  $relative: $abs / $basis;\n\n  @return if($percentage, $relative * 100, $relative);\n",
+      "line": {
+        "start": 57,
+        "end": 63
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "parameter": [
+      {
+        "type": "number",
+        "name": "abs",
+        "description": "変換対象値 (単位は省略可)"
+      },
+      {
+        "type": "number",
+        "name": "basis",
+        "description": "変換基準値 (単位は省略可)"
+      },
+      {
+        "type": "boolean",
+        "name": "percentage",
+        "default": "false",
+        "description": "百分率の形式（%の単位なし）で返す場合はtrueを指定する\n"
+      }
+    ],
+    "return": {
+      "type": "number"
+    },
+    "example": [
+      {
+        "type": "scss",
+        "code": "@debug absolute-to-relative(10, 100) * 1em; // .1em\n@debug absolute-to-relative(10, 100, true); // 10"
+      }
+    ],
+    "group": [
+      "99. ユーティリティ"
+    ],
+    "access": "public",
+    "require": [
+      {
+        "type": "function",
+        "name": "strip-unit"
+      },
+      {
+        "type": "function",
+        "name": "strip-unit"
+      }
+    ],
+    "file": {
+      "path": "utility.scss",
+      "name": "utility.scss"
+    },
+    "usedBy": [
+      {
+        "description": "px単位の値をrem単位の値に変換する\n\n",
+        "context": {
+          "type": "function",
+          "name": "rem",
+          "code": "\n  @return absolute-to-relative($px, $_font-size) * 1rem;\n",
+          "line": {
+            "start": 18,
+            "end": 20
+          }
+        }
+      },
+      {
+        "description": "px単位の値を%単位の値に変換する\n\n",
+        "context": {
+          "type": "function",
+          "name": "per",
+          "code": "\n  @return percentage(absolute-to-relative($px, $basis));\n",
+          "line": {
+            "start": 36,
+            "end": 38
+          }
+        }
+      },
+      {
+        "description": "px単位の値をvw単位の値に変換する\n\n",
+        "context": {
+          "type": "function",
+          "name": "vw",
+          "code": "\n  @return absolute-to-relative($px, $_viewport-width, true) * 1vw;\n",
+          "line": {
+            "start": 52,
+            "end": 54
+          }
+        }
+      },
+      {
+        "description": "px単位の値をvh単位の値に変換する\n\n",
+        "context": {
+          "type": "function",
+          "name": "vh",
+          "code": "\n  @return absolute-to-relative($px, $_viewport-height, true) * 1vh;\n",
+          "line": {
+            "start": 68,
+            "end": 70
+          }
+        }
+      }
+    ]
+  },
+  {
+    "description": "Clearfix\n\n",
+    "commentRange": {
+      "start": 89,
+      "end": 105
+    },
+    "context": {
+      "type": "mixin",
+      "name": "clearfix",
+      "code": "\n  &::before,\n  &::after {\n    display: table;\n    content: ' ';\n  }\n\n  &::after {\n    clear: both;\n  }\n",
+      "line": {
+        "start": 107,
+        "end": 117
+      }
+    },
+    "since": [
+      {
+        "version": "1.0.0"
+      }
+    ],
+    "example": [
+      {
+        "type": "scss",
+        "code": ".element {\n  @include clearfix;\n}\n\n// CSS Output\n.element::before, .element::after {\n   display: table;\n  content: \" \";\n }\n .element::after {\n   clear: both;\n }"
+      }
+    ],
+    "group": [
+      "99. ユーティリティ"
+    ],
+    "access": "public",
+    "file": {
+      "path": "utility.scss",
+      "name": "utility.scss"
+    }
+  }
+]

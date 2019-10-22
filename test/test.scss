@@ -1,0 +1,12 @@
+@import 'true';
+$true-terminal-output: false;
+
+@import '../scss/resources.scss';
+@import 'specs/function-breakpoint.scss';
+@import 'specs/function-list.scss';
+@import 'specs/function-map.scss';
+@import 'specs/function-string.scss';
+@import 'specs/function-unit.scss';
+@import 'specs/function-utility.scss';
+@import 'specs/mixin-media.scss';
+@import 'specs/mixin-utility.scss';

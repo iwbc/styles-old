@@ -1,0 +1,53 @@
+:root {
+  font-size: $g_font-size;
+}
+
+body {
+  font-family: $g_font-family;
+  line-height: $g_line-height;
+  color: $g_text-color;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+figure {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+figcaption {
+  &:not(:first-child) {
+    margin-top: 0.5em;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+  -ms-backface-visibility: visible;
+  backface-visibility: hidden; // for IE11 transition bug
+}
+
+a {
+  color: $g_text-link-color;
+  text-decoration: none;
+
+  img {
+    transition: opacity $g_transition-duration;
+  }
+
+  &:hover {
+    color: $g_text-link-hover-color;
+    text-decoration: underline;
+
+    img {
+      opacity: $g_opacity;
+    }
+  }
+
+  &:visited {
+    color: $g_text-link-visited-color;
+  }
+}
